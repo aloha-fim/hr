@@ -23,7 +23,22 @@ llm_model = "gpt-4-1106-preview"
 # Temperature config on how creative GPT will output
 llm = ChatOpenAI(temperature=0.0, model=llm_model)
 
-print(llm.predict("What is the weather in WA DC"))
+
+# load the data
+pf_loader = PyPDFLoader('./docs/frederec_im.pdf')
+documents = pf_loader.load()
+
+
+# create the chain with verbose to expand logging detail
+chain = load_qa_chain(llm, verbose=True)
+query = 'What year did Fred last use Python?'
+# input_documents and question are chain input paramenters
+response = chain.run(input_documents=documents,
+                     question=query)
+
+print(response)
+
+
 
 
 
