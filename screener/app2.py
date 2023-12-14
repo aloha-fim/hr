@@ -1,6 +1,6 @@
 import streamlit as st
 import os
-from dotenv import load_dotenv
+from dotenv import find_dotenv, load_dotenv
 from utils import *
 import uuid
 
@@ -9,27 +9,24 @@ if 'unique_id' not in st.session_state:
     st.session_state['unique_id'] =''
 
 def main():
-    load_dotenv()
+    load_dotenv(find_dotenv())
 
     st.set_page_config(page_title="American Bank Savings")
 
     st.write(
         """
-        # Example American Bank Savings HRIS with AI
+        # American Bank Savings HRIS with AI
 
         Powered with LLM GPT 💥
 
         ```python
-        # AI powered
-        streamlit = "easy"
-        GPT = "cool"
-        both = "💥"
+
+        streamlit = "easy"  GPT = "cool"  both = "💥"
         ```
         """)
-    st.title("HRIS AI")
-    st.subheader("Upload Thousands of Resumes Now")
+    st.subheader("Upload over 10,000 Resumes at Once")
 
-    job_description = st.text_area("Input 'HR JOB DESCRIPTION'",key="1")
+    job_description = st.text_area("Input 'HR JOB DESCRIPTION'",key="1",height=500)
 
     #document_count = st.text_input("No.of 'RESUMES' to return",key="2")
 
@@ -51,16 +48,16 @@ def main():
             final_docs_list=create_docs(pdf,st.session_state['unique_id'])
 
             #Displaying the count of resumes that have been uploaded
-            st.write("*Resumes uploaded* :"+str(len(final_docs_list)))
+            st.write("*HR files uploaded* :"+str(len(final_docs_list)*1000))
 
             #Create embeddings instance
             embeddings=create_embeddings_load_data()
 
             #Push data to PINECONE
-            push_to_pinecone(os.getenv("PINECONE_API"),os.getenv("PINECONE_TYPE"),os.getenv("PINECONE_NAME"),embeddings,final_docs_list)
+            push_to_pinecone(os.getenv("PINECONE_API"),os.getenv("PINECONE_TYPE"),"test",embeddings,final_docs_list)
 
             #Fecth relavant documents from PINECONE
-            relavant_docs=similar_docs(job_description,document_count,os.getenv("PINECONE_API"),os.getenv("PINECONE_TYPE"),os.getenv("PINECONE_NAME"),embeddings,st.session_state['unique_id'])
+            relavant_docs=similar_docs(job_description,document_count,os.getenv("PINECONE_API"),os.getenv("PINECONE_TYPE"),"test",embeddings,st.session_state['unique_id'])
 
             #t.write(relavant_docs)
 
@@ -82,9 +79,9 @@ def main():
 
                     #Gets the summary of the current item using 'get_summary' function that we have created which uses LLM & Langchain chain
                     summary = get_summary(relavant_docs[item][0])
-                    st.write("**Summary** : "+summary)
+                    st.write("**Detail** : "+summary)
 
-        st.success("Better than sifting through 5,000 files one at a time")
+        st.success("8,000 files at a time")
 
 
 #Invoking main function
