@@ -24,10 +24,10 @@ def get_pdf_text(pdf_doc):
 
 # Extract data from text
 def extracted_data(pages_data):
-    template = """Extract all the following values : Invoice ID, DESCRIPTION, Issue Date,
-         UNIT PRICE, AMOUNT, Bill For, From and Terms from: {pages}
+    template = """Extract all the following values : Account Number, Name, Date,
+         SUBTOTAL, TOTAL, From and Terms from: {pages}
 
-        Expected output: remove any dollar symbols {{'Invoice ID': '1001329','DESCRIPTION': 'UNIT PRICE','AMOUNT': '2','Date': '5/4/2023','AMOUNT': '1100.00', 'Bill For': 'james', 'From': 'excel company', 'Terms': 'pay this now'}}
+        Expected output: remove any dollar symbols {{'Account Number': '12345678','Name': 'Jane Doe','Date': '05/04/2023','TOTAL': '399.95', 'SUBTOTAL': '399.95', 'From': 'DEPOSIT TICKET', 'Terms': 'sign here if cash received'}}
         """
     prompt_template = PromptTemplate(input_variables=["pages"], template=template)
     llm = OpenAI(temperature=.7)
@@ -37,12 +37,11 @@ def extracted_data(pages_data):
 
 # create documents from the uploaded pdfs
 def create_docs(user_pdf_list):
-    df = pd.DataFrame({'Invoice ID': pd.Series(dtype='int'),
-                   'DESCRIPTION': pd.Series(dtype='str'),
-                   'Issue Date': pd.Series(dtype='str'),
-	              'UNIT PRICE': pd.Series(dtype='str'),
-                   'AMOUNT': pd.Series(dtype='int'),
-                   'Bill For': pd.Series(dtype='str'),
+    df = pd.DataFrame({'Account Number': pd.Series(dtype='int'),
+                   'Name': pd.Series(dtype='str'),
+                   'Date': pd.Series(dtype='str'),
+	              'SUBTOTAL': pd.Series(dtype='int'),
+                   'TOTAL': pd.Series(dtype='int'),
 	                'From': pd.Series(dtype='str'),
                    'Terms': pd.Series(dtype='str')
 

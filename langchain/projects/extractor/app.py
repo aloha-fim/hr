@@ -14,6 +14,7 @@ def main():
         streamlit = "easy"  GPT = "cool"  both = "💥"
         ```
         """)
+    st.subheader("Customer Fulfillment Feature added to Teller HRIS")
 
     # Upload Bills
     pdf_files = st.file_uploader("Upload Form",
@@ -25,8 +26,8 @@ def main():
         with st.spinner("Processing"):
             data_frame = create_docs(pdf_files)
             st.write(data_frame.head())
-            data_frame["AMOUNT"] = data_frame["AMOUNT"].astype(float)
-            st.write("Average bill amount: ", data_frame['AMOUNT'].mean())
+            data_frame["TOTAL"] = data_frame["TOTAL"].astype(float)
+            st.write("Average deposit amount: ", data_frame['TOTAL'].mean())
 
             # convert to csv
             convert_to_csv = data_frame.to_csv(index=False).encode("utf-8")
@@ -35,7 +36,7 @@ def main():
             st.download_button(
                 "Download",
                 convert_to_csv,
-                "CSV_Bills.csv",
+                "CSV_Deposit_Receipt.csv",
                 "text/csv",
                 key="download-csv"
             )
